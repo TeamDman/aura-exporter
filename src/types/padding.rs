@@ -10,7 +10,7 @@ use super::frame_name::FrameName;
 use super::locale::Locale;
 use super::time_zone::TimeZone;
 use super::url::Url;
-use super::user_id::UserId;
+use super::user::UserId;
 use super::user_name::UserName;
 
 #[derive(Debug, Serialize, Deserialize)]

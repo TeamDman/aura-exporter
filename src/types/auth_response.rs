@@ -3,13 +3,14 @@ use crate::types::email::Email;
 use crate::types::feature::Feature;
 use crate::types::file_name::FileName;
 use crate::types::locale::Locale;
-use crate::types::user_id::UserId;
 use crate::types::user_name::UserName;
 use chrono::DateTime;
 use chrono::Utc;
 use serde::Deserialize;
 use serde::Serialize;
 use serde_json::Value;
+
+use super::user::UserId;
 
 #[derive(Serialize, Deserialize)]
 pub struct AuthResponse {

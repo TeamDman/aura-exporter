@@ -19,7 +19,7 @@ use super::locale::Locale;
 use super::time_zone::TimeZone;
 use super::url::Url;
 use super::user::User;
-use super::user_id::UserId;
+use super::user::UserId;
 
 #[derive(StringHolder)]
 pub struct FrameId {

@@ -10,7 +10,7 @@ use super::padding::Padding;
 use super::time_zone::TimeZone;
 use super::url::Url;
 use super::user::User;
-use super::user_id::UserId;
+use super::user::UserId;
 use super::user_name::UserName;
 use chrono::DateTime;
 use chrono::Utc;
