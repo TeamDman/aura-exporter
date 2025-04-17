@@ -90,3 +90,13 @@ pub struct Asset {
     pub location: Value,
     pub user: User,
 }
+
+impl Asset {
+    pub fn get_url(&self) -> Url {
+        Url::new(format!(
+            "https://imgproxy.pushd.com/{user_id}/{file_name}",
+            user_id = self.user_id,
+            file_name = self.file_name
+        ))
+    }
+}
