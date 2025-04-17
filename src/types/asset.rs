@@ -1,5 +1,3 @@
-use std::rc::Rc;
-
 use super::file_name::FileName;
 use super::padding::Padding;
 use super::url::Url;
@@ -10,6 +8,7 @@ use chrono::Utc;
 use serde::Deserialize;
 use serde::Serialize;
 use serde_json::Value;
+use std::rc::Rc;
 use vscodehelper_macros::StringHolder;
 
 #[derive(StringHolder)]

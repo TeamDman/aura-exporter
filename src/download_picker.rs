@@ -1,15 +1,13 @@
-use std::path::Path;
-
-use cloud_terrastodon_core_user_input::prelude::Choice;
-use cloud_terrastodon_core_user_input::prelude::FzfArgs;
-use cloud_terrastodon_core_user_input::prelude::pick;
-use cloud_terrastodon_core_user_input::prelude::pick_many;
-use tracing::info;
-
 use crate::asset_download::download_asset;
 use crate::assets::get_assets_for_frame;
 use crate::auth::create_authenticated_client;
 use crate::frames::get_frames;
+use cloud_terrastodon_core_user_input::prelude::Choice;
+use cloud_terrastodon_core_user_input::prelude::FzfArgs;
+use cloud_terrastodon_core_user_input::prelude::pick;
+use cloud_terrastodon_core_user_input::prelude::pick_many;
+use std::path::Path;
+use tracing::info;
 
 pub async fn download_picker(save_dir: &Path) -> eyre::Result<()> {
     let frames = get_frames().await?.frames;

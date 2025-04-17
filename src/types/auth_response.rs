@@ -1,3 +1,4 @@
+use super::user::UserId;
 use crate::types::auth_token::AuthToken;
 use crate::types::email::Email;
 use crate::types::feature::Feature;
@@ -9,8 +10,6 @@ use chrono::Utc;
 use serde::Deserialize;
 use serde::Serialize;
 use serde_json::Value;
-
-use super::user::UserId;
 
 #[derive(Serialize, Deserialize)]
 pub struct AuthResponse {

@@ -1,14 +1,12 @@
-use std::rc::Rc;
-
+use super::email::Email;
+use super::user_name::UserName;
 use chrono::DateTime;
 use chrono::Utc;
 use serde::Deserialize;
 use serde::Serialize;
 use serde_json::Value;
+use std::rc::Rc;
 use vscodehelper_macros::StringHolder;
-
-use super::email::Email;
-use super::user_name::UserName;
 
 #[derive(StringHolder)]
 pub struct UserId {

@@ -1,17 +1,15 @@
-use std::rc::Rc;
-
-use chrono::DateTime;
-use chrono::Utc;
-use serde::Deserialize;
-use serde::Serialize;
-use serde_json::Value;
-use vscodehelper_macros::StringHolder;
-
 use super::email::Email;
 use super::frame::FrameId;
 use super::user::User;
 use super::user::UserId;
 use super::user_name::UserName;
+use chrono::DateTime;
+use chrono::Utc;
+use serde::Deserialize;
+use serde::Serialize;
+use serde_json::Value;
+use std::rc::Rc;
+use vscodehelper_macros::StringHolder;
 
 #[derive(StringHolder)]
 pub struct DeliveredFrameGiftId {

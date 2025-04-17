@@ -1,12 +1,10 @@
-use std::rc::Rc;
-
+use super::frame::FrameId;
 use chrono::DateTime;
 use chrono::Utc;
 use serde::Deserialize;
 use serde::Serialize;
+use std::rc::Rc;
 use vscodehelper_macros::StringHolder;
-
-use super::frame::FrameId;
 
 #[derive(StringHolder)]
 pub struct FrameEnvironmentId {

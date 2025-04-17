@@ -1,11 +1,10 @@
+use crate::types::auth_response::AuthResponse;
 use eyre::bail;
 use reqwest::Client;
 use serde_json::json;
 use std::path::Path;
 use tracing::info;
 use tracing::warn;
-
-use crate::types::auth_response::AuthResponse;
 
 const AUTH_FILE_NAME: &str = "aura-auth.json";
 

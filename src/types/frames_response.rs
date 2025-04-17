@@ -1,8 +1,7 @@
+use super::frame::Frame;
 use serde::Deserialize;
 use serde::Serialize;
 use serde_json::Value;
-
-use super::frame::Frame;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct FramesResponse {

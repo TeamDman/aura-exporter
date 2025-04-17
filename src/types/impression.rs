@@ -1,15 +1,13 @@
-use std::rc::Rc;
-
+use super::asset::Asset;
+use super::asset::AssetId;
+use super::frame::FrameId;
 use chrono::DateTime;
 use chrono::Utc;
 use serde::Deserialize;
 use serde::Serialize;
 use serde_json::Value;
+use std::rc::Rc;
 use vscodehelper_macros::StringHolder;
-
-use super::asset::Asset;
-use super::asset::AssetId;
-use super::frame::FrameId;
 
 #[derive(StringHolder)]
 pub struct ImpressionId {
