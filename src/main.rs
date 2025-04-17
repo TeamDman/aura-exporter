@@ -1,23 +1,32 @@
 use std::collections::HashMap;
-
-use asset_summary::summarize_assets_for_frame;
 use ::clap::CommandFactory;
 use ::clap::FromArgMatches;
+use asset_download::download_asset;
+use asset_summary::summarize_assets_for_frame;
+use auth::create_authenticated_client;
 use auth::login;
+use clap::AssetCommand;
 use clap::Cli;
 use clap::Commands;
+use clap::FrameAssetCommand;
 use clap::FrameCommand;
 use frames::get_frames;
 use frames::pull_frames;
 use itertools::Itertools;
+use types::asset::Asset;
+use types::asset::AssetId;
+use types::file_name::FileName;
 use types::frame::FrameId;
+use types::user::UserId;
 use types::user_name::UserName;
+pub mod asset_download;
+pub mod asset_summary;
 pub mod assets;
 pub mod auth;
 pub mod clap;
+pub mod download_picker;
 pub mod frames;
 pub mod types;
-pub mod asset_summary;
 
 #[tokio::main]
 async fn main() -> eyre::Result<()> {
@@ -59,19 +68,27 @@ async fn main() -> eyre::Result<()> {
                     println!("{}\t{}", frame.id, frame.name);
                 }
             }
-            FrameCommand::Pull => {
-                pull_frames().await?;
-            }
             FrameCommand::Asset(asset_command) => match asset_command {
-                clap::FrameAssetCommand::Pull { frame_id } => {
-                    let frame_id = FrameId::new(frame_id);
-                    assets::pull_assets_for_frame(&frame_id).await?;
-                }
-                clap::FrameAssetCommand::List { frame_id } => {
+                FrameAssetCommand::List { frame_id } => {
                     let frame_id = FrameId::new(frame_id);
                     summarize_assets_for_frame(&frame_id).await?;
                 }
+                FrameAssetCommand::DownloadPicker { save_dir } => {
+                    download_picker::download_picker(&save_dir).await?;
+                }
             },
+        },
+        Commands::Asset(command) => match command {
+            AssetCommand::Download {
+                user_id,
+                file_name,
+                save_dir,
+            } => {
+                let user_id = UserId::new(user_id);
+                let file_name = FileName::new(file_name);
+                let client = create_authenticated_client().await?;
+                download_asset(&client, &user_id, &file_name, &save_dir).await?;
+            }
         },
     }
     Ok(())

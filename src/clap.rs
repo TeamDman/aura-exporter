@@ -1,6 +1,7 @@
 use clap::Parser;
 use clap::Subcommand;
 use std::fmt::Debug;
+use std::path::PathBuf;
 
 #[derive(Parser, Debug)]
 #[command(name = "aura", about, long_about = None)]
@@ -18,11 +19,12 @@ pub enum Commands {
     Logout,
     #[command(subcommand)]
     Frame(FrameCommand),
+    #[command(subcommand)]
+    Asset(AssetCommand),
 }
 
 #[derive(Subcommand, Debug)]
 pub enum FrameCommand {
-    Pull,
     List,
     #[command(subcommand)]
     Asset(FrameAssetCommand),
@@ -30,12 +32,24 @@ pub enum FrameCommand {
 
 #[derive(Subcommand, Debug)]
 pub enum FrameAssetCommand {
-    Pull {
-        #[arg(long)]
-        frame_id: String,
-    },
     List {
         #[arg(long)]
         frame_id: String,
+    },
+    DownloadPicker {
+        #[arg(long)]
+        save_dir: PathBuf,
+    },
+}
+
+#[derive(Subcommand, Debug)]
+pub enum AssetCommand {
+    Download {
+        #[arg(long)]
+        user_id: String,
+        #[arg(long)]
+        file_name: String,
+        #[arg(long)]
+        save_dir: PathBuf,
     },
 }

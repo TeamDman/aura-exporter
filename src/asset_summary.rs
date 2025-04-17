@@ -1,4 +1,4 @@
-use crate::assets;
+use crate::assets::get_assets_for_frame;
 use crate::frames::get_frames;
 use crate::types::frame::FrameId;
 use crate::types::user_name::UserName;
@@ -6,7 +6,7 @@ use itertools::Itertools;
 use std::collections::HashMap;
 
 pub async fn summarize_assets_for_frame(frame_id: &FrameId) -> eyre::Result<()> {
-    let frame_assets = assets::read_assets_for_frame(&frame_id).await?;
+    let frame_assets = get_assets_for_frame(&frame_id).await?;
     let frames = get_frames().await?;
     let users = frames
         .frames

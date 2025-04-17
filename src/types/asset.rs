@@ -92,11 +92,18 @@ pub struct Asset {
 }
 
 impl Asset {
-    pub fn get_url(&self) -> Url {
+    pub fn get_download_url(&self) -> Url {
         Url::new(format!(
             "https://imgproxy.pushd.com/{user_id}/{file_name}",
             user_id = self.user_id,
             file_name = self.file_name
+        ))
+    }
+    pub fn create_download_url(user_id: &UserId, file_name: &FileName) -> Url {
+        Url::new(format!(
+            "https://imgproxy.pushd.com/{user_id}/{file_name}",
+            user_id = user_id,
+            file_name = file_name
         ))
     }
 }
