@@ -9,7 +9,7 @@ pub struct Cli {
     pub debug: bool,
 
     #[command(subcommand)]
-    pub command: Option<Commands>,
+    pub command: Commands,
 }
 
 #[derive(Subcommand, Debug)]
@@ -18,11 +18,12 @@ pub enum Commands {
     Logout,
     Frame {
         #[command(subcommand)]
-        command: Option<FrameCommand>,
+        command: FrameCommand,
     },
 }
 
 #[derive(Subcommand, Debug)]
 pub enum FrameCommand {
+    Pull,
     List,
 }
