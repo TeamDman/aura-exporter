@@ -1,6 +1,6 @@
 use ::clap::CommandFactory;
 use ::clap::FromArgMatches;
-use asset_download::download_asset;
+use asset_downloader::AssetDownloadBuilder;
 use asset_summary::summarize_assets_for_frame;
 use auth::create_authenticated_client;
 use auth::login;
@@ -13,7 +13,8 @@ use frames::get_frames;
 use types::file_name::FileName;
 use types::frame::FrameId;
 use types::user::UserId;
-pub mod asset_download;
+
+pub mod asset_downloader;
 pub mod asset_summary;
 pub mod assets;
 pub mod auth;
@@ -81,7 +82,13 @@ async fn main() -> eyre::Result<()> {
                 let user_id = UserId::new(user_id);
                 let file_name = FileName::new(file_name);
                 let client = create_authenticated_client().await?;
-                download_asset(&client, &user_id, &file_name, &save_dir).await?;
+                AssetDownloadBuilder::new()
+                    .user_id(user_id.clone())
+                    .file_name(file_name.clone())
+                    .save_dir(save_dir.clone())
+                    .build()?
+                    .run(&client)
+                    .await?;
             }
         },
     }

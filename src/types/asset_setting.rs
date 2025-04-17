@@ -21,9 +21,9 @@ pub struct AssetSetting {
     pub frame_id: FrameId,
     pub hidden: bool,
     pub id: AssetSettingId,
-    pub last_impression_at: DateTime<Utc>,
+    pub last_impression_at: Option<DateTime<Utc>>,
     pub reason: String,
     pub selected: bool,
-    pub updated_at: DateTime<Utc>,
+    pub updated_at: Option<DateTime<Utc>>,
     pub updated_selected_at: DateTime<Utc>,
 }

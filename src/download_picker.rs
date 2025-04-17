@@ -1,4 +1,4 @@
-use crate::asset_download::download_asset;
+use crate::asset_downloader::AssetDownloadBuilder;
 use crate::assets::get_assets_for_frame;
 use crate::auth::create_authenticated_client;
 use crate::frames::get_frames;
@@ -37,7 +37,12 @@ pub async fn download_picker(save_dir: &Path) -> eyre::Result<()> {
 
     let client = create_authenticated_client().await?;
     while let Some(asset) = chosen_assets.pop() {
-        download_asset(&client, &asset.user.id, &asset.file_name, save_dir).await?;
+        AssetDownloadBuilder::new()
+            .asset(&asset)
+            .save_dir(&save_dir)
+            .build()?
+            .run(&client)
+            .await?;
         info!("Downloaded asset, {} remain", chosen_assets.len());
     }
 

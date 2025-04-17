@@ -1,6 +1,7 @@
 use crate::auth::create_authenticated_client;
 use crate::types::frame::FrameId;
 use crate::types::frame_assets_response::FrameAssetsResponse;
+use eyre::Context;
 use eyre::bail;
 use std::path::PathBuf;
 use tracing::debug;
@@ -27,7 +28,8 @@ pub async fn pull_assets_for_frame(frame_id: &FrameId) -> eyre::Result<FrameAsse
     tokio::fs::write(path, &response_json_pretty).await?;
 
     debug!("Parsing frame assets response as known type");
-    let result: FrameAssetsResponse = serde_json::from_str(&response_json_pretty)?;
+    let result: FrameAssetsResponse =
+        serde_json::from_str(&response_json_pretty).wrap_err(format!("frame id: {frame_id}"))?;
     Ok(result)
 }
 
