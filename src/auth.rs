@@ -6,9 +6,8 @@ use tracing::info;
 use tracing::warn;
 
 use crate::types::auth_response::AuthResponse;
-use crate::types::auth_token;
 
-const AUTH_FILE_NAME: &'static str = "aura-auth.json";
+const AUTH_FILE_NAME: &str = "aura-auth.json";
 
 pub async fn login() -> eyre::Result<()> {
     let email = std::env::var("AURA_EMAIL");

@@ -9,15 +9,7 @@ use vscodehelper_macros::StringHolder;
 
 use super::asset::Asset;
 use super::asset::AssetId;
-use super::email::Email;
-use super::feature::Feature;
 use super::frame::FrameId;
-use super::frame_name::FrameName;
-use super::locale::Locale;
-use super::time_zone::TimeZone;
-use super::url::Url;
-use super::user::UserId;
-use super::user_name::UserName;
 
 #[derive(StringHolder)]
 pub struct ImpressionId {
