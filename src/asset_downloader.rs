@@ -32,7 +32,6 @@ impl AssetDownloadBuilder {
         self
     }
 
-
     pub fn file_name(&mut self, file_name: FileName) -> &mut Self {
         self.file_name = Some(file_name);
         self

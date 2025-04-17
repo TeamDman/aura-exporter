@@ -39,7 +39,7 @@ pub async fn download_picker(save_dir: &Path) -> eyre::Result<()> {
     while let Some(asset) = chosen_assets.pop() {
         AssetDownloadBuilder::new()
             .asset(&asset)
-            .save_dir(&save_dir)
+            .save_dir(save_dir)
             .build()?
             .run(&client)
             .await?;
