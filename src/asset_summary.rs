@@ -6,13 +6,12 @@ use itertools::Itertools;
 use std::collections::HashMap;
 
 pub async fn summarize_assets_for_frame(frame_id: &FrameId) -> eyre::Result<()> {
-    let frame_assets = get_assets_for_frame(&frame_id).await?;
+    let frame_assets = get_assets_for_frame(frame_id).await?;
     let frames = get_frames().await?;
     let users = frames
         .frames
         .iter()
-        .map(|frame| &frame.contributors)
-        .flatten()
+        .flat_map(|frame| &frame.contributors)
         .map(|user| (user.id.clone(), user))
         .collect::<HashMap<_, _>>();
     let asset_users = frame_assets.assets.iter().counts_by(|asset| &asset.user_id);

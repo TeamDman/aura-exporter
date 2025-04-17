@@ -39,7 +39,7 @@ pub async fn download_picker(save_dir: &Path) -> eyre::Result<()> {
 
     let client = create_authenticated_client().await?;
     while let Some(asset) = chosen_assets.pop() {
-        download_asset(&client, &asset.user.id, &asset.file_name, &save_dir).await?;
+        download_asset(&client, &asset.user.id, &asset.file_name, save_dir).await?;
         info!("Downloaded asset, {} remain", chosen_assets.len());
     }
 
