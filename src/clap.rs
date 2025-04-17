@@ -16,14 +16,26 @@ pub struct Cli {
 pub enum Commands {
     Login,
     Logout,
-    Frame {
-        #[command(subcommand)]
-        command: FrameCommand,
-    },
+    #[command(subcommand)]
+    Frame(FrameCommand),
 }
 
 #[derive(Subcommand, Debug)]
 pub enum FrameCommand {
     Pull,
     List,
+    #[command(subcommand)]
+    Asset(FrameAssetCommand),
+}
+
+#[derive(Subcommand, Debug)]
+pub enum FrameAssetCommand {
+    Pull {
+        #[arg(long)]
+        frame_id: String,
+    },
+    List {
+        #[arg(long)]
+        frame_id: String,
+    },
 }

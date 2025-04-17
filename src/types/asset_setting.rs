@@ -1,0 +1,29 @@
+use super::asset::AssetId;
+use super::frame::FrameId;
+use super::user::UserId;
+use chrono::DateTime;
+use chrono::Utc;
+use serde::Deserialize;
+use serde::Serialize;
+use std::rc::Rc;
+use vscodehelper_macros::StringHolder;
+
+#[derive(StringHolder)]
+pub struct AssetSettingId {
+    pub inner: Rc<str>,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct AssetSetting {
+    pub added_by_id: UserId,
+    pub asset_id: AssetId,
+    pub created_at: DateTime<Utc>,
+    pub frame_id: FrameId,
+    pub hidden: bool,
+    pub id: AssetSettingId,
+    pub last_impression_at: DateTime<Utc>,
+    pub reason: String,
+    pub selected: bool,
+    pub updated_at: DateTime<Utc>,
+    pub updated_selected_at: DateTime<Utc>,
+}

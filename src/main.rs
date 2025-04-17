@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use ::clap::CommandFactory;
 use ::clap::FromArgMatches;
 use auth::login;
@@ -6,6 +8,10 @@ use clap::Commands;
 use clap::FrameCommand;
 use frames::get_frames;
 use frames::pull_frames;
+use itertools::Itertools;
+use types::frame::FrameId;
+use types::user_name::UserName;
+pub mod assets;
 pub mod auth;
 pub mod clap;
 pub mod frames;
@@ -45,15 +51,49 @@ async fn main() -> eyre::Result<()> {
             login().await?;
         }
         Commands::Logout => {}
-        Commands::Frame { command } => match command {
+        Commands::Frame(command) => match command {
             FrameCommand::List => {
                 for frame in get_frames().await?.frames {
-                    println!("{}", frame.name);
+                    println!("{}\t{}", frame.id, frame.name);
                 }
             }
             FrameCommand::Pull => {
                 pull_frames().await?;
             }
+            FrameCommand::Asset(asset_command) => match asset_command {
+                clap::FrameAssetCommand::Pull { frame_id } => {
+                    let frame_id = FrameId::new(frame_id);
+                    assets::pull_assets_for_frame(&frame_id).await?;
+                }
+                clap::FrameAssetCommand::List { frame_id } => {
+                    let frame_id = FrameId::new(frame_id);
+                    let frame_assets = assets::read_assets_for_frame(&frame_id).await?;
+                    let frames = get_frames().await?;
+                    let users = frames
+                        .frames
+                        .iter()
+                        .map(|frame| &frame.contributors)
+                        .flatten()
+                        .map(|user| (user.id.clone(), user))
+                        .collect::<HashMap<_, _>>();
+                    let asset_users = frame_assets.assets.iter().counts_by(|asset| &asset.user_id);
+                    let longest_name_length = users
+                        .values()
+                        .filter(|user| asset_users.contains_key(&user.id))
+                        .map(|user| user.name.to_string().len())
+                        .max()
+                        .unwrap_or(0);
+                    for (user_id, count) in
+                        asset_users.into_iter().sorted_by_key(|(_, count)| *count)
+                    {
+                        let user_display = users
+                            .get(user_id)
+                            .map(|user| user.name.clone())
+                            .unwrap_or(UserName::new("Unknown User"));
+                        println!("{} {:>width$}\t{}", user_id, user_display.to_string(), count, width = longest_name_length);
+                    }
+                }
+            },
         },
     }
     Ok(())
