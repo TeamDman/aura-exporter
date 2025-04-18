@@ -5,6 +5,7 @@ use asset_summary::summarize_assets_for_frame;
 use auth::create_authenticated_client;
 use auth::login;
 use clap::AssetCommand;
+use clap::BackupCommand;
 use clap::Cli;
 use clap::Commands;
 use clap::FrameAssetCommand;
@@ -22,6 +23,8 @@ pub mod clap;
 pub mod download_picker;
 pub mod frames;
 pub mod types;
+pub mod backup_manager;
+pub mod backup_manager_actions;
 
 #[tokio::main]
 async fn main() -> eyre::Result<()> {
@@ -89,6 +92,12 @@ async fn main() -> eyre::Result<()> {
                     .build()?
                     .run(&client)
                     .await?;
+            }
+        },
+        Commands::Backup(command) => match command {
+            BackupCommand::Sync { save_dir, delay_ms } => {
+                let client = create_authenticated_client().await?;
+                todo!("finish impl, use downloadmanager");
             }
         },
     }

@@ -6,12 +6,12 @@ use chrono::Utc;
 use serde::Deserialize;
 use serde::Serialize;
 use serde_json::Value;
-use std::rc::Rc;
-use vscodehelper_macros::StringHolder;
+use std::sync::Arc;
+use holda::StringHolda;
 
-#[derive(StringHolder)]
+#[derive(StringHolda)]
 pub struct ImpressionId {
-    pub inner: Rc<str>,
+    pub inner: Arc<str>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]

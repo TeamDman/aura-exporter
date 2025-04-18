@@ -92,6 +92,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "async-trait"
+version = "0.1.88"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e539d3fca749fcee5236ab05e93a52867dd549cc157c8cb7f99595f3cedffdb5"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn",
+]
+
+[[package]]
 name = "atomic-waker"
 version = "1.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -101,12 +112,14 @@ checksum = "1505bd5d3d116872e7271a6d4e16d81d0c8570876c8de68093a09ac269d8aac0"
 name = "aura-exporter"
 version = "0.1.0"
 dependencies = [
+ "async-trait",
  "chrono",
  "clap",
  "cloud_terrastodon_core_user_input",
  "color-eyre",
  "eyre",
  "futures-util",
+ "holda",
  "itertools 0.14.0",
  "regex",
  "reqwest",
@@ -116,7 +129,6 @@ dependencies = [
  "tracing",
  "tracing-subscriber",
  "uuid",
- "vscodehelper-macros",
 ]
 
 [[package]]
@@ -502,6 +514,17 @@ name = "heck"
 version = "0.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2304e00983f87ffb38b55b444b5e3b60a884b5d30c0fca7d82fe33449bbe55ea"
+
+[[package]]
+name = "holda"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "18b58cb1388f69d0a9b9b8efcff34b8105af7c992d0ea172fab5f2a3fc93a768"
+dependencies = [
+ "quote",
+ "serde",
+ "syn",
+]
 
 [[package]]
 name = "http"
@@ -1745,16 +1768,6 @@ name = "vcpkg"
 version = "0.2.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "accd4ea62f7bb7a82fe23066fb0957d48ef677f6eeb8215f372f52e48bb32426"
-
-[[package]]
-name = "vscodehelper-macros"
-version = "0.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "12e6344d233d73eefc5e0280b3224d7c87862782880400a9addd42329ae7b07b"
-dependencies = [
- "quote",
- "syn",
-]
 
 [[package]]
 name = "want"

@@ -3,12 +3,12 @@ use chrono::DateTime;
 use chrono::Utc;
 use serde::Deserialize;
 use serde::Serialize;
-use std::rc::Rc;
-use vscodehelper_macros::StringHolder;
+use std::sync::Arc;
+use holda::StringHolda;
 
-#[derive(StringHolder)]
+#[derive(StringHolda)]
 pub struct FrameEnvironmentId {
-    pub inner: Rc<str>,
+    pub inner: Arc<str>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]

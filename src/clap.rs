@@ -21,6 +21,8 @@ pub enum Commands {
     Frame(FrameCommand),
     #[command(subcommand)]
     Asset(AssetCommand),
+    #[command(subcommand)]
+    Backup(BackupCommand),
 }
 
 #[derive(Subcommand, Debug)]
@@ -52,4 +54,14 @@ pub enum AssetCommand {
         #[arg(long)]
         save_dir: PathBuf,
     },
+}
+
+#[derive(Subcommand, Debug)]
+pub enum BackupCommand {
+    Sync {
+        #[arg(long)]
+        save_dir: PathBuf,
+        #[arg(long)]
+        delay_ms: u32,
+    }
 }

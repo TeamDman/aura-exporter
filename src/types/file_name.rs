@@ -1,7 +1,7 @@
-use std::rc::Rc;
-use vscodehelper_macros::StringHolder;
+use std::sync::Arc;
+use holda::StringHolda;
 
-#[derive(StringHolder)]
+#[derive(StringHolda)]
 pub struct FileName {
-    pub inner: Rc<str>,
+    pub inner: Arc<str>,
 }
