@@ -5,6 +5,7 @@ use crate::remote_types::file_name::FileName;
 use crate::remote_types::user::UserId;
 use eyre::bail;
 use reqwest::Client;
+use tracing::warn;
 
 #[derive(Debug)]
 pub struct DownloadUserAssetAction {
@@ -31,13 +32,18 @@ impl BackupManagerAction for DownloadUserAssetAction {
             bail!("Local files not discovered yet");
         };
 
-        AssetDownloadBuilder::new()
+        if let Err(e) = AssetDownloadBuilder::new()
             .user_id(self.user_id.clone())
             .file_name(self.file_name.clone())
             .output_file_path(output_file_path)
             .build()?
             .run(&self.client)
-            .await?;
+            .await
+        {
+            warn!("Failed to download user asset: {}", e);
+            warn!("Will continue to try and download the other stuff");
+            return Ok(());
+        }
 
         local_files
             .entry(self.user_id)
