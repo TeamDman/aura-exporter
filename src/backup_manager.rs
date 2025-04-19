@@ -10,6 +10,7 @@ use std::collections::HashMap;
 use std::collections::VecDeque;
 use std::path::PathBuf;
 use std::time::Duration;
+use crate::clap::JiggleStrategy;
 
 #[derive(Debug)]
 pub struct BackupManager {
@@ -18,9 +19,11 @@ pub struct BackupManager {
     pub frame_assets: HashMap<FrameId, FrameAssetsResponse>,
     pub local_backup_structure: LocalBackupStructure,
     pub stack: VecDeque<Box<dyn BackupManagerAction>>,
+    pub jiggle: Duration,
+    pub jiggle_strategy: JiggleStrategy,
 }
 impl BackupManager {
-    pub fn new(save_dir: PathBuf, delay: Duration) -> Self {
+    pub fn new(save_dir: PathBuf, delay: Duration, jiggle: Duration, jiggle_strategy: JiggleStrategy) -> Self {
         Self {
             delay,
             frames: Default::default(),
@@ -31,6 +34,8 @@ impl BackupManager {
                 stack.push_back(Box::new(BootstrapAction));
                 stack
             },
+            jiggle,
+            jiggle_strategy,
         }
     }
     pub async fn run(&mut self) -> eyre::Result<()> {

@@ -10,9 +10,10 @@ pub struct SleepAction {
 
 impl std::fmt::Display for SleepAction {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let base = self.duration.as_millis();
         f.write_fmt(format_args!(
-            "SleepAction - {} seconds",
-            self.duration.as_secs()
+            "SleepAction - {}ms total",
+            base
         ))
     }
 }
