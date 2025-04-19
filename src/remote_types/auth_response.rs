@@ -1,10 +1,10 @@
 use super::user::UserId;
-use crate::types::auth_token::AuthToken;
-use crate::types::email::Email;
-use crate::types::feature::Feature;
-use crate::types::file_name::FileName;
-use crate::types::locale::Locale;
-use crate::types::user_name::UserName;
+use crate::remote_types::auth_token::AuthToken;
+use crate::remote_types::email::Email;
+use crate::remote_types::feature::Feature;
+use crate::remote_types::file_name::FileName;
+use crate::remote_types::locale::Locale;
+use crate::remote_types::user_name::UserName;
 use chrono::DateTime;
 use chrono::Utc;
 use serde::Deserialize;

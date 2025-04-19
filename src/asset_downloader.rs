@@ -1,7 +1,7 @@
-use crate::types::asset::Asset;
-use crate::types::file_name::FileName;
-use crate::types::url::Url;
-use crate::types::user::UserId;
+use crate::remote_types::asset::Asset;
+use crate::remote_types::file_name::FileName;
+use crate::remote_types::url::Url;
+use crate::remote_types::user::UserId;
 use eyre::Context;
 use eyre::eyre;
 use futures_util::StreamExt;
@@ -15,7 +15,7 @@ use tracing::debug;
 pub struct AssetDownloadBuilder {
     user_id: Option<UserId>,
     file_name: Option<FileName>,
-    save_dir: Option<PathBuf>,
+    output_file_path: Option<PathBuf>,
 }
 impl AssetDownloadBuilder {
     pub fn new() -> Self {
@@ -37,8 +37,8 @@ impl AssetDownloadBuilder {
         self
     }
 
-    pub fn save_dir(&mut self, save_dir: impl AsRef<Path>) -> &mut Self {
-        self.save_dir = Some(save_dir.as_ref().to_path_buf());
+    pub fn output_file_path(&mut self, path: impl AsRef<Path>) -> &mut Self {
+        self.output_file_path = Some(path.as_ref().to_path_buf());
         self
     }
 
@@ -51,26 +51,21 @@ impl AssetDownloadBuilder {
             .file_name
             .as_ref()
             .ok_or_else(|| eyre!("File name is required"))?;
-        let save_dir = self
-            .save_dir
-            .as_ref()
-            .ok_or_else(|| eyre!("Save directory is required"))?;
-        let save_path = save_dir
-            .join(format!("user-{user_id}"))
-            .join(format!("{file_name}"));
-
+        let output_file_path = self
+            .output_file_path
+            .clone()
+            .ok_or_else(|| eyre!("Output file path is required"))?;
         let asset_url = Asset::create_download_url(user_id, file_name);
-
         Ok(AssetDownloadPlan {
             asset_url,
-            save_path,
+            output_file_path,
         })
     }
 }
 
 pub struct AssetDownloadPlan {
     pub asset_url: Url,
-    pub save_path: PathBuf,
+    pub output_file_path: PathBuf,
 }
 impl AssetDownloadPlan {
     pub async fn run(self, client: &Client) -> eyre::Result<File> {
@@ -82,7 +77,7 @@ impl AssetDownloadPlan {
             .error_for_status()?;
 
         // Create the save directory if it doesn't exist
-        if let Some(parent) = self.save_path.parent() {
+        if let Some(parent) = self.output_file_path.parent() {
             if !matches!(tokio::fs::try_exists(parent).await, Ok(true)) {
                 tokio::fs::create_dir_all(parent)
                     .await
@@ -91,7 +86,7 @@ impl AssetDownloadPlan {
         }
 
         // Create the destination file
-        let mut file = tokio::fs::File::create(&self.save_path).await?;
+        let mut file = tokio::fs::File::create(&self.output_file_path).await?;
 
         // Stream the response body to the file
         let mut byte_stream = response.bytes_stream();
@@ -99,7 +94,7 @@ impl AssetDownloadPlan {
             tokio::io::copy(&mut item?.as_ref(), &mut file).await?;
         }
 
-        debug!("Downloaded asset to: {}", self.save_path.display());
+        debug!("Downloaded asset to: {}", self.output_file_path.display());
         Ok(file)
     }
 }

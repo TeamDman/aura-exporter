@@ -1,8 +1,11 @@
-use crate::types::auth_response::AuthResponse;
+use crate::remote_types::auth_response::AuthResponse;
+use eyre::Context;
 use eyre::bail;
 use reqwest::Client;
 use serde_json::json;
+use tracing::debug;
 use std::path::Path;
+use tokio::sync::OnceCell;
 use tracing::info;
 use tracing::warn;
 
@@ -80,6 +83,22 @@ pub async fn load_auth_data() -> eyre::Result<AuthResponse> {
     Ok(auth_data)
 }
 
+const CLIENT: OnceCell<Client> = OnceCell::const_new();
+
+pub async fn get_authenticated_client() -> eyre::Result<Client> {
+    if let Some(client) = CLIENT.get() {
+        debug!("Using existing authenticated client");
+        Ok(client.clone())
+    } else {
+        debug!("Creating new authenticated client");
+        let client = create_authenticated_client().await?;
+        CLIENT.set(client.clone()).wrap_err(eyre::eyre!(
+            "Failed to set authenticated client in OnceCell"
+        ))?;
+        Ok(client)
+    }
+}
+
 pub async fn create_authenticated_client() -> eyre::Result<Client> {
     let auth_data = load_auth_data().await?;
     let user_id = auth_data.result.current_user.id;
@@ -100,6 +119,6 @@ pub async fn create_authenticated_client() -> eyre::Result<Client> {
         })
         .build()?;
 
-    info!("Created authenticated client");
+    debug!("Created authenticated client");
     Ok(client)
 }

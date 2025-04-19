@@ -1,7 +1,7 @@
 use crate::assets::get_assets_for_frame;
 use crate::frames::get_frames;
-use crate::types::frame::FrameId;
-use crate::types::user_name::UserName;
+use crate::remote_types::frame::FrameId;
+use crate::remote_types::user_name::UserName;
 use itertools::Itertools;
 use std::collections::HashMap;
 

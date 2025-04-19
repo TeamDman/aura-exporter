@@ -59,8 +59,11 @@ pub enum AssetCommand {
 #[derive(Subcommand, Debug)]
 pub enum BackupCommand {
     Sync {
+        /// Root directory of the vault where backup information will be persisted
         #[arg(long)]
         save_dir: PathBuf,
+
+        /// Delay between remote actions, e.g., fetching image assets
         #[arg(long)]
         delay_ms: u32,
     }

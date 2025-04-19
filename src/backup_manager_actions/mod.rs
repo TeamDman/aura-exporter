@@ -1,2 +1,9 @@
 pub mod init_action;
 pub mod get_frames_action;
+pub mod discover_local_files_action;
+pub mod enqueue_get_all_frame_assets_action;
+pub mod get_frame_assets_action;
+pub mod download_generator_action;
+pub mod enqueue_download_generator_action_action;
+pub mod download_user_asset_action;
+pub mod sleep_action;

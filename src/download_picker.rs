@@ -1,7 +1,8 @@
 use crate::asset_downloader::AssetDownloadBuilder;
 use crate::assets::get_assets_for_frame;
-use crate::auth::create_authenticated_client;
+use crate::auth::get_authenticated_client;
 use crate::frames::get_frames;
+use crate::local_backup_structure::LocalBackupStructure;
 use cloud_terrastodon_core_user_input::prelude::Choice;
 use cloud_terrastodon_core_user_input::prelude::FzfArgs;
 use cloud_terrastodon_core_user_input::prelude::pick;
@@ -35,11 +36,14 @@ pub async fn download_picker(save_dir: &Path) -> eyre::Result<()> {
         ..Default::default()
     })?;
 
-    let client = create_authenticated_client().await?;
+    let client = get_authenticated_client().await?;
+    let local_backup_structure = LocalBackupStructure::new(save_dir.to_path_buf());
     while let Some(asset) = chosen_assets.pop() {
+        let output_file_path =
+            local_backup_structure.get_path_for_user_asset(&asset.user_id, &asset.file_name);
         AssetDownloadBuilder::new()
             .asset(&asset)
-            .save_dir(save_dir)
+            .output_file_path(output_file_path)
             .build()?
             .run(&client)
             .await?;

@@ -1,5 +1,5 @@
 pub mod asset;
-mod asset_setting;
+pub mod asset_setting;
 pub mod auth_response;
 pub mod auth_token;
 pub mod delivered_frame_gift;

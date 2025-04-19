@@ -12,6 +12,7 @@ color-eyre = "0.6.3"
 eyre = "0.6.12"
 futures-util = "0.3.31"
 holda = { version = "0.1.0", features = ["serde"] }
+humantime = "2.2.0"
 itertools = "0.14.0"
 # ollama-rs = "0.3.0"
 regex = "1.11.1"

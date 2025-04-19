@@ -1,9 +1,12 @@
+use std::time::Duration;
+
 use ::clap::CommandFactory;
 use ::clap::FromArgMatches;
 use asset_downloader::AssetDownloadBuilder;
 use asset_summary::summarize_assets_for_frame;
-use auth::create_authenticated_client;
+use auth::get_authenticated_client;
 use auth::login;
+use backup_manager::BackupManager;
 use clap::AssetCommand;
 use clap::BackupCommand;
 use clap::Cli;
@@ -11,20 +14,22 @@ use clap::Commands;
 use clap::FrameAssetCommand;
 use clap::FrameCommand;
 use frames::get_frames;
-use types::file_name::FileName;
-use types::frame::FrameId;
-use types::user::UserId;
+use local_backup_structure::LocalBackupStructure;
+use remote_types::file_name::FileName;
+use remote_types::frame::FrameId;
+use remote_types::user::UserId;
 
 pub mod asset_downloader;
 pub mod asset_summary;
 pub mod assets;
 pub mod auth;
+pub mod backup_manager;
+pub mod backup_manager_actions;
 pub mod clap;
 pub mod download_picker;
 pub mod frames;
-pub mod types;
-pub mod backup_manager;
-pub mod backup_manager_actions;
+pub mod local_backup_structure;
+pub mod remote_types;
 
 #[tokio::main]
 async fn main() -> eyre::Result<()> {
@@ -84,11 +89,14 @@ async fn main() -> eyre::Result<()> {
             } => {
                 let user_id = UserId::new(user_id);
                 let file_name = FileName::new(file_name);
-                let client = create_authenticated_client().await?;
+                let client = get_authenticated_client().await?;
+                let local_backup_structure = LocalBackupStructure::new(save_dir.to_path_buf());
+                let output_file_path =
+                    local_backup_structure.get_path_for_user_asset(&user_id, &file_name);
                 AssetDownloadBuilder::new()
                     .user_id(user_id.clone())
                     .file_name(file_name.clone())
-                    .save_dir(save_dir.clone())
+                    .output_file_path(output_file_path)
                     .build()?
                     .run(&client)
                     .await?;
@@ -96,8 +104,9 @@ async fn main() -> eyre::Result<()> {
         },
         Commands::Backup(command) => match command {
             BackupCommand::Sync { save_dir, delay_ms } => {
-                let client = create_authenticated_client().await?;
-                todo!("finish impl, use downloadmanager");
+                BackupManager::new(save_dir, Duration::from_millis(delay_ms as u64))
+                    .run()
+                    .await?;
             }
         },
     }
