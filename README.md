@@ -33,7 +33,7 @@ I've had family mistakenly wipe their frame with no backup restore possible, so 
 1.  **Login:** (Required before running any other commands)
 
     ```pwsh
-    cargo run -- login
+    aura-exporter login
     ```
 
     This command will authenticate with the Aura API using the `AURA_EMAIL` and `AURA_PASSWORD` environment variables. It will save the authentication token to `aura-auth.json`.
@@ -42,7 +42,7 @@ I've had family mistakenly wipe their frame with no backup restore possible, so 
 2.  **Logout:**
 
     ```pwsh
-    cargo run -- logout
+    aura-exporter logout
     ```
 
     Removes the authentication file `aura-auth.json`.
@@ -50,7 +50,7 @@ I've had family mistakenly wipe their frame with no backup restore possible, so 
 3.  **List Frames:**
 
     ```pwsh
-    cargo run -- frame list
+    aura-exporter frame list
     ```
 
     Lists all frames associated with your account, displaying their ID and name.
@@ -58,7 +58,7 @@ I've had family mistakenly wipe their frame with no backup restore possible, so 
 4.  **List Frame Assets:**
 
     ```pwsh
-    cargo run -- frame asset list --frame-id <frame_id>
+    aura-exporter frame asset list --frame-id <frame_id>
     ```
 
     Lists all assets associated with a specific frame, summarized by user.  Replace `<frame_id>` with the ID of the frame you want to view assets for.
@@ -66,7 +66,7 @@ I've had family mistakenly wipe their frame with no backup restore possible, so 
 5.  **Download Specific Asset:**
 
     ```pwsh
-    cargo run -- asset download --user-id <user_id> --file-name <file_name> --save-dir <save_dir>
+    aura-exporter asset download --user-id <user_id> --file-name <file_name> --save-dir <save_dir>
     ```
 
     Downloads a specific asset.  Requires the `user_id`, `file_name`, and `save_dir` arguments.
@@ -74,7 +74,7 @@ I've had family mistakenly wipe their frame with no backup restore possible, so 
 6.  **Interactive Asset Download:**
 
     ```pwsh
-    cargo run -- frame asset download-picker --save-dir <save_dir>
+    aura-exporter frame asset download-picker --save-dir <save_dir>
     ```
 
     Allows you to interactively select frames and assets to download using a fuzzy finder.
@@ -82,7 +82,7 @@ I've had family mistakenly wipe their frame with no backup restore possible, so 
 7.  **Backup All Assets:**
 
     ```pwsh
-    cargo run -- backup sync --save-dir <save_dir> --delay-ms 3000
+    aura-exporter backup sync --save-dir <save_dir> --delay-ms 3000
     ```
 
     Downloads all assets associated with all frames.
