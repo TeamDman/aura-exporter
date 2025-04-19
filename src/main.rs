@@ -103,10 +103,19 @@ async fn main() -> eyre::Result<()> {
             }
         },
         Commands::Backup(command) => match command {
-            BackupCommand::Sync { save_dir, delay_ms } => {
-                BackupManager::new(save_dir, Duration::from_millis(delay_ms as u64))
-                    .run()
-                    .await?;
+            BackupCommand::Sync {
+                save_dir,
+                delay_ms,
+                jiggle_ms,
+                jiggle_strategy,
+            } => {
+                let mut backup_manager = BackupManager::new(
+                    save_dir,
+                    Duration::from_millis(delay_ms as u64),
+                    Duration::from_millis(jiggle_ms as u64),
+                    jiggle_strategy,
+                );
+                backup_manager.run().await?;
             }
         },
     }

@@ -66,5 +66,19 @@ pub enum BackupCommand {
         /// Delay between remote actions, e.g., fetching image assets
         #[arg(long)]
         delay_ms: u32,
+
+        /// Jitter in milliseconds to add to the delay
+        #[arg(long, default_value_t = 0)]
+        jiggle_ms: u32,
+
+        /// Jiggle distribution strategy (uniform, normal)
+        #[arg(long, default_value = "normal")]
+        jiggle_strategy: JiggleStrategy,
     }
+}
+
+#[derive(clap::ValueEnum, Clone, Debug, Copy)]
+pub enum JiggleStrategy {
+    Uniform,
+    Normal,
 }
