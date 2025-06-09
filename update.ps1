@@ -8,6 +8,7 @@ if (-not (Test-Path $new_exe)) {
     Write-Error "Could not find target exe, run `cargo build --release` please."
     return
 }
+cargo build --release
 Copy-Item -Path $new_exe -Destination $old_exe
 Write-Host "Now in path:"
 aura-exporter --version

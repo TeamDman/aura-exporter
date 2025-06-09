@@ -21,11 +21,14 @@ I've had family mistakenly wipe their frame with no backup restore possible, so 
 
 ### Installation
 
-1.  Clone the repository:
+1. Download the latest Windows executable from the [Releases](https://github.com/teamdman/aura-exporter/releases) page.
+
+2. (Optional) If you prefer to build from source:
 
     ```bash
     git clone <repository_url>
     cd aura-exporter
+    cargo build --release
     ```
 
 ### Usage

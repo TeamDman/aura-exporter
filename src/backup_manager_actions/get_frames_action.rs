@@ -15,7 +15,7 @@ impl BackupManagerAction for GetFramesAction {
     async fn apply(self: Box<Self>, manager: &mut BackupManager) -> eyre::Result<()> {
         assert!(manager.frames.is_none(), "Frames already fetched");
         
-        let frames = get_frames().await?;
+        let frames = get_frames(manager.refresh_every).await?;
         manager.frames = Some(frames);
 
         Ok(())

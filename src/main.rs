@@ -67,8 +67,8 @@ async fn main() -> eyre::Result<()> {
         Commands::Logout => {}
         Commands::Frame(command) => match command {
             FrameCommand::List => {
-                for frame in get_frames().await?.frames {
-                    println!("{}\t{}", frame.id, frame.name);
+                for frame in get_frames(None).await?.frames {
+                    println!("{}: {}", frame.id, frame.name);
                 }
             }
             FrameCommand::Asset(asset_command) => match asset_command {
@@ -77,7 +77,7 @@ async fn main() -> eyre::Result<()> {
                     summarize_assets_for_frame(&frame_id).await?;
                 }
                 FrameAssetCommand::DownloadPicker { save_dir } => {
-                    download_picker::download_picker(&save_dir).await?;
+                    download_picker::download_picker(save_dir).await?;
                 }
             },
         },
@@ -108,13 +108,11 @@ async fn main() -> eyre::Result<()> {
                 delay_ms,
                 jiggle_ms,
                 jiggle_strategy,
+                refresh_every,
             } => {
-                let mut backup_manager = BackupManager::new(
-                    save_dir,
-                    Duration::from_millis(delay_ms as u64),
-                    Duration::from_millis(jiggle_ms as u64),
-                    jiggle_strategy,
-                );
+                let delay = Duration::from_millis(delay_ms as u64);
+                let jiggle = Duration::from_millis(jiggle_ms as u64);
+                let mut backup_manager = BackupManager::new(save_dir, delay, jiggle, jiggle_strategy, refresh_every);
                 backup_manager.run().await?;
             }
         },
