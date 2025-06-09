@@ -74,6 +74,10 @@ pub enum BackupCommand {
         /// Jiggle distribution strategy (uniform, normal)
         #[arg(long, default_value = "normal")]
         jiggle_strategy: JiggleStrategy,
+
+        /// How often to refresh the frames and assets from the remote API, e.g., 8h, 1d. If not set, data is read from local cache if available.
+        #[arg(long, value_parser = humantime::parse_duration)]
+        refresh_every: Option<std::time::Duration>,
     }
 }
 

@@ -21,9 +21,10 @@ pub struct BackupManager {
     pub stack: VecDeque<Box<dyn BackupManagerAction>>,
     pub jiggle: Duration,
     pub jiggle_strategy: JiggleStrategy,
+    pub refresh_every: Option<Duration>,
 }
 impl BackupManager {
-    pub fn new(save_dir: PathBuf, delay: Duration, jiggle: Duration, jiggle_strategy: JiggleStrategy) -> Self {
+    pub fn new(save_dir: PathBuf, delay: Duration, jiggle: Duration, jiggle_strategy: JiggleStrategy, refresh_every: Option<Duration>) -> Self {
         Self {
             delay,
             frames: Default::default(),
@@ -36,6 +37,7 @@ impl BackupManager {
             },
             jiggle,
             jiggle_strategy,
+            refresh_every,
         }
     }
     pub async fn run(&mut self) -> eyre::Result<()> {

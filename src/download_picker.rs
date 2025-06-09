@@ -7,11 +7,13 @@ use cloud_terrastodon_core_user_input::prelude::Choice;
 use cloud_terrastodon_core_user_input::prelude::FzfArgs;
 use cloud_terrastodon_core_user_input::prelude::pick;
 use cloud_terrastodon_core_user_input::prelude::pick_many;
-use std::path::Path;
+
+use std::path::PathBuf;
 use tracing::info;
 
-pub async fn download_picker(save_dir: &Path) -> eyre::Result<()> {
-    let frames = get_frames().await?.frames;
+pub async fn download_picker(save_dir: PathBuf) -> eyre::Result<()> {
+    let client = get_authenticated_client().await?;
+    let frames = get_frames(None).await?.frames;
     let chosen_frame = pick(FzfArgs {
         choices: frames
             .into_iter()
@@ -36,7 +38,6 @@ pub async fn download_picker(save_dir: &Path) -> eyre::Result<()> {
         ..Default::default()
     })?;
 
-    let client = get_authenticated_client().await?;
     let local_backup_structure = LocalBackupStructure::new(save_dir.to_path_buf());
     while let Some(asset) = chosen_assets.pop() {
         let output_file_path =

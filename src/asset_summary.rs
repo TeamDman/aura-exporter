@@ -7,7 +7,7 @@ use std::collections::HashMap;
 
 pub async fn summarize_assets_for_frame(frame_id: &FrameId) -> eyre::Result<()> {
     let frame_assets = get_assets_for_frame(frame_id).await?;
-    let frames = get_frames().await?;
+    let frames = get_frames(None).await?;
     let users = frames
         .frames
         .iter()
